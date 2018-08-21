@@ -1,0 +1,34 @@
+{
+	"_id": "5b7c6b612612242a6d34ebb6",
+	"mobileNumber": "919810936551",
+	"firstName": "rahul",
+	"lastName": "vashishth",
+	"email": "rahul.vashishth@gmail.com",
+	"locationString": "jal vihar, sector 46",
+	"city": "gurgaon",
+	"latitude": "28.457523",
+	"longitude": "77.026344",
+	"categoryId": "1",
+	"categoryName": "Accountant",
+	"yearOfExp": "3",
+	"role": "Individual",
+	"subCategories": [
+		{
+			"id": "5b7c6b612612242a6d34ebb8",
+			"name": "Clerk/Book Keeper",
+			"images": [
+				"image_one"
+			],
+			"videos": [],
+			"links": []
+		},
+		{
+			"id": "5b7c706c2612242b99ce597f",
+			"name": "Daily Wages Worker ssss "
+		},
+		{
+			"id": "5b7c70af2612242b99ce5981",
+			"name": "Daily Wages Worker ssss "
+		}
+	]
+}
