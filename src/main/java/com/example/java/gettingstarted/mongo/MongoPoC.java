@@ -70,9 +70,9 @@ public class MongoPoC {
 	@PostConstruct
 	public void resourceInitialization() throws JsonParseException, JsonMappingException, IOException{
 		// connect to atlas cluster
-		
+		mongoClient = MongoClients.create("mongodb+srv://tempemp:tempemp123@tempempdevelopmentcluster-vuzoa.gcp.mongodb.net/tempemp?retryWrites=true");
 		// connect to localhost
-		mongoClient = MongoClients.create();
+		//mongoClient = MongoClients.create();
 		
 		System.out.println("===========DB Names ========");
 		MongoIterable<String> listDatabaseNames = mongoClient.listDatabaseNames();

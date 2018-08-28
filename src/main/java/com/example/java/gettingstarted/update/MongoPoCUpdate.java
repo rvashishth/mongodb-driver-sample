@@ -30,7 +30,9 @@ import com.mongodb.MongoCredential;
 //import com.mongodb.MongoClientOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.Document;
@@ -67,9 +69,9 @@ public class MongoPoCUpdate {
 	@PostConstruct
 	public void resourceInitialization() throws JsonParseException, JsonMappingException, IOException{
 		// connect to atlas cluster
-		
+		mongoClient = MongoClients.create("mongodb+srv://tempemp:tempemp123@tempempdevelopmentcluster-vuzoa.gcp.mongodb.net/tempemp?retryWrites=true");
 		// connect to localhost
-		mongoClient = MongoClients.create();
+		//mongoClient = MongoClients.create();
 		
 		System.out.println("===========DB Names ========");
 		MongoIterable<String> listDatabaseNames = mongoClient.listDatabaseNames();
@@ -81,7 +83,7 @@ public class MongoPoCUpdate {
 		// Check reference json in src/main/resource
 		individualCollection = database.getCollection("individual");
 		
-		removeImage();
+		removeMultipleSkill();
 		//http://www.javahotchocolate.com/notes/mongodb-crud.html  === best examples 
 	}
 	
@@ -121,6 +123,48 @@ public class MongoPoCUpdate {
 		System.out.println(updateOne.getModifiedCount());
 	}
 	
+	
+	// TODO: Add multiple sub category with empty array - done  || Add a new document in the array   ---- Done
+	public void addMultipleSkill() {
+		BasicDBObject addressSpec = new BasicDBObject();
+		addressSpec.put("id", new ObjectId().toString());
+		addressSpec.put("name", "one");
+		addressSpec.put("images", new ArrayList<>());
+		
+		BasicDBObject addressSpec2 = new BasicDBObject();
+		addressSpec2.put("id", new ObjectId().toString());
+		addressSpec2.put("name", "two");
+		addressSpec2.put("images", new ArrayList<>());
+
+		List<BasicDBObject> list = new ArrayList<>();
+		list.add(addressSpec); list.add(addressSpec2);
+		
+		UpdateResult updateOne = individualCollection.updateOne(Filters.eq("_id", "5b7c6b612612242a6d34ebb6"), 
+				Updates.pushEach("subCategories", list));
+		System.out.println("=======================");
+		System.out.println(updateOne.getMatchedCount());
+		System.out.println(updateOne.getModifiedCount());
+	}
+	
+	//TODO: Remove multiple skills 
+	public void removeMultipleSkill(){
+		List<BasicDBObject> list = new ArrayList<>();
+		
+		BasicDBObject addressSpec = new BasicDBObject();
+		addressSpec.put("id", "5b7db195261224bee58f7a96");
+		
+		BasicDBObject addressSpec2 = new BasicDBObject();
+		addressSpec2.put("id", "5b7db195261224bee58f7a97");
+		
+		list.add(addressSpec); list.add(addressSpec2);
+		
+		UpdateResult updateOne = individualCollection.updateOne(Filters.eq("_id", "5b7c6b612612242a6d34ebb6"), 
+				Updates.pullAll("subCategories", list));
+		System.out.println("=======================");
+		System.out.println(updateOne.getMatchedCount());
+		System.out.println(updateOne.getModifiedCount());
+	}
+	
 	// TODO: Remove a image or link || Remove a element from the array of document of an array
 	public void removeImage(){
 		BasicDBObject match = new BasicDBObject();
@@ -149,6 +193,8 @@ public class MongoPoCUpdate {
 		System.out.println(updateOne.getMatchedCount());
 		System.out.println(updateOne.getModifiedCount());
 	}
+	
+	
 	@PreDestroy
 	public void resourceCleanup(){
 		mongoClient.close();
