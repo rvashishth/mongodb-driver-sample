@@ -85,7 +85,7 @@ public class MongoPoC {
 		individualCollection = database.getCollection("individual");
 		userCollection = database.getCollection("users");
 		
-		updateOne();
+		//updateOne();
 	}
 	
 	public void updateOne(){

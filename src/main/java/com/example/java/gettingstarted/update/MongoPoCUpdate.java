@@ -52,6 +52,8 @@ public class MongoPoCUpdate {
 	
 	private MongoCollection<Document> individualCollection;
 	
+	private MongoCollection<Document> recruiterCollection;
+	
 	ObjectMapper mapper = new ObjectMapper();
 	
 	Block<Document> printBlock = new Block<Document>() {
@@ -82,11 +84,25 @@ public class MongoPoCUpdate {
 		database = mongoClient.getDatabase("tempemp");
 		// Check reference json in src/main/resource
 		individualCollection = database.getCollection("individual");
+		recruiterCollection = database.getCollection("recruiter");
 		
-		removeMultipleSkill();
+		updatejobs();
 		//http://www.javahotchocolate.com/notes/mongodb-crud.html  === best examples 
 	}
 	
+	
+	public void updatejobs(){
+		System.out.println("====starting update=====");
+		BasicDBObject filter = new BasicDBObject();
+		filter.put("_id", "5b7c6b612612242a6d34ebb6"); 
+		filter.put("subCategories.id", "5b7c6b612612242a6d34ebb8");
+		
+		UpdateResult updateOne = recruiterCollection.updateOne(Filters.eq("jobs.jobId", "5b93dbed883f270702b59fb1"), 
+				Updates.set("jobs.$.jobTitle", "awesome developer"));
+		System.out.println(updateOne.getMatchedCount());
+		System.out.println(updateOne.getModifiedCount());
+		System.out.println("========");
+	}
 	
 	// TODO: Remove a sub category || Remove a document from the array
 	public void removeSkill(){
